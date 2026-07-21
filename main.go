@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"github.com/Vortexcrab/cs-stats-parser/internal/stats"
 )
@@ -34,6 +35,8 @@ func main() {
 		fmt.Printf("%s kills: %d, deaths: %d, won: %v\n", m.Nick, m.Kills, m.Deaths, m.RoundResult)
 	}
 
+	fmt.Println("---------------------------------")
+
 	file, err := os.Open("testdata/matches.csv")
 	if err != nil {
 		log.Fatal(err)
@@ -47,6 +50,24 @@ func main() {
 	}
 
 	for _, record := range records[1:] {
-		fmt.Println(record)
+		nick := record[0]
+		kills, err := strconv.Atoi(record[1])
+		if err != nil {
+			log.Fatal(err)
+		}
+		deaths, err := strconv.Atoi(record[2])
+		if err != nil {
+			log.Fatal(err)
+		}
+		result, err := strconv.ParseBool(record[3])
+		if err != nil {
+			log.Fatal(err)
+		}
+		match := stats.Match{
+			Nick:        nick,
+			Kills:       kills,
+			Deaths:      deaths,
+			RoundResult: result}
+		fmt.Printf("%s kills: %d, deaths: %d, won: %v\n", match.Nick, match.Kills, match.Deaths, match.RoundResult)
 	}
 }
