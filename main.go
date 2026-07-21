@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 
 	"github.com/Vortexcrab/cs-stats-parser/internal/stats"
 )
@@ -32,4 +34,10 @@ func main() {
 		fmt.Printf("%s kills: %d, deaths: %d, won: %v\n", m.Nick, m.Kills, m.Deaths, m.RoundResult)
 	}
 
+	file, err := os.Open("testdata/matches.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	fmt.Println("File opened successfully.")
 }
