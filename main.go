@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
 	"log"
 	"os"
@@ -29,7 +30,6 @@ func main() {
 		Deaths:      4,
 		RoundResult: true,
 	}
-
 	for _, m := range []stats.Match{match, match2, match3} {
 		fmt.Printf("%s kills: %d, deaths: %d, won: %v\n", m.Nick, m.Kills, m.Deaths, m.RoundResult)
 	}
@@ -39,5 +39,14 @@ func main() {
 		log.Fatal(err)
 	}
 	defer file.Close()
-	fmt.Println("File opened successfully.")
+
+	reader := csv.NewReader(file)
+	records, err := reader.ReadAll()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, record := range records[1:] {
+		fmt.Println(record)
+	}
 }
