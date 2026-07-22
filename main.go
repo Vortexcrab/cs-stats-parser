@@ -1,11 +1,12 @@
 package main
 
 import (
-	"encoding/csv"
+	/*"encoding/csv"*/
 	"fmt"
 	"log"
-	"os"
-	"strconv"
+
+	/*"os"
+	"strconv"*/
 
 	"github.com/Vortexcrab/cs-stats-parser/internal/stats"
 )
@@ -36,38 +37,11 @@ func main() {
 	}
 
 	fmt.Println("---------------------------------")
-
-	file, err := os.Open("testdata/matches.csv")
+	matches, err := stats.ParseCSV("testdata/matches.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer file.Close()
-
-	reader := csv.NewReader(file)
-	records, err := reader.ReadAll()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, record := range records[1:] {
-		nick := record[0]
-		kills, err := strconv.Atoi(record[1])
-		if err != nil {
-			log.Fatal(err)
-		}
-		deaths, err := strconv.Atoi(record[2])
-		if err != nil {
-			log.Fatal(err)
-		}
-		result, err := strconv.ParseBool(record[3])
-		if err != nil {
-			log.Fatal(err)
-		}
-		match := stats.Match{
-			Nick:        nick,
-			Kills:       kills,
-			Deaths:      deaths,
-			RoundResult: result}
-		fmt.Printf("%s kills: %d, deaths: %d, won: %v\n", match.Nick, match.Kills, match.Deaths, match.RoundResult)
+	for _, m := range matches {
+		fmt.Printf("%s kills: %d, deaths: %d, won: %v\n", m.Nick, m.Kills, m.Deaths, m.RoundResult)
 	}
 }
