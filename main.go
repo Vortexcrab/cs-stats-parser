@@ -45,7 +45,14 @@ func main() {
 		fmt.Printf("%s kills: %d, deaths: %d, won: %v\n", m.Nick, m.Kills, m.Deaths, m.RoundResult)
 	}
 
+	grouped := make(map[string][]stats.Match)
+	for _, m := range matches {
+		grouped[m.Nick] = append(grouped[m.Nick], m)
+	}
+
 	fmt.Println("---------------------------------")
-	player := stats.CalcStats(matches)
-	fmt.Printf("nick: %s kills: %d, deaths %d, wins: %d, defeats: %d\n", player.Nick, player.Kills, player.Deaths, player.Wins, player.Defeats)
+	for _, playerMatches := range grouped {
+		player := stats.CalcStats(playerMatches)
+		fmt.Printf("nick: %s kills: %d, deaths %d, wins: %d, defeats: %d\n", player.Nick, player.Kills, player.Deaths, player.Wins, player.Defeats)
+	}
 }
